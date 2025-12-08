@@ -6,6 +6,7 @@
 #include <ctime>
 #include <iostream>
 #include <string>
+#include <vector>
 
 // Each of the following defines a macro
 // Essentially nicenames to use instead of the corresponding escape sequence ('\') 
@@ -87,6 +88,7 @@ void Board::initializeTiles(int player_index, int playerPath) {
         // Recall i refers to tile 0 to 51
         _tiles[player_index][i] = tile;
         }
+
     } else if (playerPath == 2){ // This is the path creationg for the harder path
         for (int i = 0; i < total_tiles; i++) {
         // Set the last tile as Orange for the finish line
@@ -205,4 +207,8 @@ int Board::getPlayerPosition(int player_index) const {
         return _player_position[player_index];
     }
     return -1;
+}
+// checks the color of the tile and returns the char associated with it
+char Board::checkColor(int player_index, int playerPos) {
+    return _tiles[player_index][playerPos].color;
 }

@@ -33,6 +33,7 @@ int main(){
     cin >> player1Journey;
 
     cout << "Player 1, What charecter would you like to play as (enter the number): " << endl;
+    cout << "Base Stats for each charecter: \nplayerName|experience|accuracy|efficiency|insight|discoveryPoints" << endl;
     cout << "1. Dr.Leo|5|500|500|1000|20000" << endl;
     cout << "2. Dr.Helix|8|900|600|600|20000" << endl;
     cout << "3. Dr.Panthera|12|900|700|500|20000" << endl;
@@ -66,6 +67,7 @@ int main(){
     cin >> player2Journey;
 
     cout << "Player 2, What charecter would you like to play as (enter the number): " << endl;
+    cout << "Base Stats for each charecter: \nplayerName|experience|accuracy|efficiency|insight|discoveryPoints" << endl;
     cout << "1. Dr.Leo|5|500|500|1000|20000" << endl;
     cout << "2. Dr.Helix|8|900|600|600|20000" << endl;
     cout << "3. Dr.Panthera|12|900|700|500|20000" << endl;
@@ -119,6 +121,20 @@ int main(){
         } else {
             cout << player1Name << " you have reached the end and have to wait for the other player" << endl;
         }
+
+        //Changes player 1's attributes depending on the tile they land on
+        char tileColorP1 = mainBoard.checkColor(0, mainBoard.getPlayerPosition(0));
+                if (tileColorP1 == 'B'){
+                    player1.setDiscoveryPoints(player1.getDiscoveryPoints() + 500);
+                } else if (tileColorP1 == 'P'){
+                     player1.setAccuracy(player1.getAccuracy() + 100);
+                } else if (tileColorP1 == 'T'){
+                     player1.setAccuracy(player1.getAccuracy() - 200);
+                } else if (tileColorP1 == 'R'){
+                     player1.setEfficiency(player1.getEfficiency() + 200);
+                } else if (tileColorP1 == 'U'){
+                     player1.setEfficiency(player1.getEfficiency() - 100);
+                }
     
         // Player 2's Turn
         mainBoard.displayBoard();
@@ -134,7 +150,20 @@ int main(){
         } else {
             cout << player2Name << " you have reached the end and have to wait for the other player" << endl;
         }
-    
+
+        //Changes player 2's attributes depending on the tile they land on
+        char tileColorP2 = mainBoard.checkColor(1, mainBoard.getPlayerPosition(1));
+                if (tileColorP2 == 'B'){
+                    player2.setDiscoveryPoints(player2.getDiscoveryPoints() + 500);
+                } else if (tileColorP2 == 'P'){
+                     player2.setAccuracy(player2.getAccuracy() + 100);
+                } else if (tileColorP2 == 'T'){
+                     player2.setAccuracy(player2.getAccuracy() - 200);
+                } else if (tileColorP2 == 'R'){
+                     player2.setEfficiency(player2.getEfficiency() + 200);
+                } else if (tileColorP2 == 'U'){
+                     player2.setEfficiency(player2.getEfficiency() - 100);
+                }
     }
     mainBoard.displayBoard();
     cout << "You\'ve both reached the end. Congradulations, tallying up the points now."<< endl;
@@ -162,7 +191,7 @@ int main(){
     // Appends to a file to keep track of final scores over time
     ofstream postGameFile("GameScores.txt", ios::app);
     if (postGameFile.is_open()) {
-        postGameFile << "The winner was " << winner << "| " << player1Name << " had " << player1.getDiscoveryPoints() << " Discovery Points| " << player2Name << " had " << player2.getDiscoveryPoints() << " Discovery Points" << endl;
+        postGameFile << "The winner was " << winner << " | " << player1Name << " had " << player1.getDiscoveryPoints() << " Discovery Points | " << player2Name << " had " << player2.getDiscoveryPoints() << " Discovery Points" << endl;
     }
     postGameFile.close();
 }
@@ -196,7 +225,7 @@ void mainMenu(string playerName, int player1Pos, int playerNum, int player1DP, i
             mainMenu(playerName, player1Pos, playerNum, player1DP, accPoints, effPoints, insPoints, playerAdvisor, player2DP, player2Pos);
             break;
         case 2:
-            cout << "You have " << 52-player1Pos << " more tiles to go" << endl;
+            cout << "You have " << 51-player1Pos << " more tiles to go" << endl;
             cout << "press 1 to go back" << endl;
             cin >> userInput;
             mainMenu(playerName, player1Pos, playerNum, player1DP, accPoints, effPoints, insPoints, playerAdvisor, player2DP, player2Pos);
@@ -225,7 +254,7 @@ void mainMenu(string playerName, int player1Pos, int playerNum, int player1DP, i
             if (userInput == 1){
                 cout << "Your opponent has " << player2DP << " Discovery Points." << endl;
             } else if (userInput == 2){
-                cout << "Your opponent has " << 52-player1Pos << " more tiles to go" << endl;
+                cout << "Your opponent has " << 51-player1Pos << " more tiles to go" << endl;
             }
             cout << "press 1 to go back" << endl;
             cin >> userInput;

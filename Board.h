@@ -31,6 +31,7 @@ class Board {
         bool movePlayer(int player_index);
         // Recall we can use const for getter functions
         int getPlayerPosition(int player_index) const;
+        char checkColor(int player_index, int playerPos);
 };
 
 #endif
