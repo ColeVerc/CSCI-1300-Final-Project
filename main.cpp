@@ -1,12 +1,14 @@
-
+// Imported Files 
 #include "Board.cpp"
 #include "Player.cpp"
 
+// Imported Libraries
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <cstdlib>
 #include <ctime>
+
 using namespace std;
 
 //declaring functions
@@ -16,7 +18,7 @@ void setDefualtAttributes(Player& player);
 void mainMenu(string playerName, int player1Pos, int playerNum, int player1DP, int accPoints, int effPoints, int insPoints, string playerAdvisor, int player2DP, int player2Pos);
 int playTurn();
 
-// Before the game starts
+// Players get to select their charecters and atributes
 int main(){
     srand(time(0));
 
@@ -93,7 +95,7 @@ int main(){
         player2Advisor = "No Advisor";
     }
     
-
+    // Creates the Board and players with the atributes selected above
     Board mainBoard(player1Journey, player2Journey);
     Player player1(player1Name, player1Advisor, player1Journey);
     Player player2(player2Name, player2Advisor, player2Journey);
@@ -101,7 +103,7 @@ int main(){
     setDefualtAttributes(player2);
 
     // Acutal Repeated Part of game
-    // Win Condition
+    // When both are true the game ends
     bool player1End = false;
     bool player2End = false;
 
@@ -110,6 +112,7 @@ int main(){
         // Player 1's Turn
         mainBoard.displayBoard();
         mainMenu(player1Name, mainBoard.getPlayerPosition(0), 0, player1.getDiscoveryPoints(), player1.getAccuracy(), player1.getEfficiency(), player1.getInsight(), player1.getAdvisor(), player2.getDiscoveryPoints(), mainBoard.getPlayerPosition(1));
+        // Will skip turn if they have already made it to the end
         if (!player1End){
             for (int i = 0; i < playTurn(); i++){
                 if (mainBoard.movePlayer(0)){
@@ -117,7 +120,6 @@ int main(){
                     break;
                 }
             }
-            // check the tile were on
         } else {
             cout << player1Name << " you have reached the end and have to wait for the other player" << endl;
         }
@@ -139,6 +141,7 @@ int main(){
         // Player 2's Turn
         mainBoard.displayBoard();
         mainMenu(player2Name, mainBoard.getPlayerPosition(1), 1, player2.getDiscoveryPoints(), player2.getAccuracy(), player2.getEfficiency(), player2.getInsight(), player2.getAdvisor(), player1.getDiscoveryPoints(), mainBoard.getPlayerPosition(0));
+        // Will skip turn if they have already made it to the end
         if (!player2End){
             for (int i = 0; i < playTurn(); i++){
                 if (mainBoard.movePlayer(1)){
@@ -146,7 +149,6 @@ int main(){
                     break;
                 }
             }
-            // check the tile were on
         } else {
             cout << player2Name << " you have reached the end and have to wait for the other player" << endl;
         }
@@ -196,6 +198,7 @@ int main(){
     postGameFile.close();
 }
 
+// Main menu function to control all the things the user can do before the spin for their turn
 void mainMenu(string playerName, int player1Pos, int playerNum, int player1DP, int accPoints, int effPoints, int insPoints, string playerAdvisor, int player2DP, int player2Pos){
     string temp;
     int userInput;
@@ -319,6 +322,8 @@ string convertAdvisorType(int advisorNum){
     return advisorName;
 }
 
+//Gives the player objects the appropriate stats from their path choice and charecter choice
+//I had to use a reference parameter, I probably couldve done it a different way but I got stuck and it wouldve taken much much more lines of code.
 void setDefualtAttributes(Player& player){
     fstream charecterFile;
     int delimIndex1;

@@ -46,7 +46,7 @@ void Board::initializeTiles(int player_index, int playerPath) {
     // Recall 52 from header file
     int total_tiles = _BOARD_SIZE;
 
-    if (playerPath == 1){ // This is the path creationg for the easier path
+    if (playerPath == 1){ // This is the code for creating the easier path
         for (int i = 0; i < total_tiles; i++) {
         // Set the last tile as Orange for the finish line
         if (i == total_tiles - 1) {
@@ -89,7 +89,7 @@ void Board::initializeTiles(int player_index, int playerPath) {
         _tiles[player_index][i] = tile;
         }
 
-    } else if (playerPath == 2){ // This is the path creationg for the harder path
+    } else if (playerPath == 2){ // This is the code for creating the harder path
         for (int i = 0; i < total_tiles; i++) {
         // Set the last tile as Orange for the finish line
         if (i == total_tiles - 1) {
@@ -208,6 +208,7 @@ int Board::getPlayerPosition(int player_index) const {
     }
     return -1;
 }
+
 // checks the color of the tile and returns the char associated with it
 char Board::checkColor(int player_index, int playerPos) {
     return _tiles[player_index][playerPos].color;

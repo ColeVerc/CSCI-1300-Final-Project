@@ -5,6 +5,7 @@
 
 #include "Tile.h"
 
+// I changed many of the parameters in the funcitions and constructor to be able to create the different paths for each charecter
 class Board {
     private:
         // Static in this context: Belongs to the class, not each object

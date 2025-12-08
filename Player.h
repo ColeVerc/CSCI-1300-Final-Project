@@ -1,5 +1,5 @@
+// Imported Libraries 
 #include <string>
-//#include "charecters.cpp"
 
 // Recognized as "include guards"
 // Prevent the board header file from being used more than once
@@ -50,7 +50,7 @@ class Player {
             return discoveryPoints;
         }
 
-
+        //Setters
         void setPlayerName(string name){
             playerName = name;
         }
@@ -75,12 +75,6 @@ class Player {
         void setDiscoveryPoints(int dp){
             discoveryPoints = dp;
         }
-        // void initializeBoard();
-        // void displayTrack(int player_index);
-        // void displayBoard();
-        // bool movePlayer(int player_index);
-        // // Recall we can use const for getter functions
-        // int getPlayerPosition(int player_index) const;
 };
 
 #endif
