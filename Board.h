@@ -17,15 +17,15 @@ class Board {
         int _player_count;
         int _player_position[_MAX_PLAYERS];
 
-        void initializeTiles(int player_index);
+        void initializeTiles(int player_index, int playerPath);
         bool isPlayerOnTile(int player_index, int pos);
         void displayTile(int player_index, int pos);
 
     public:
         // Default Constructor
-        Board();
+        Board(int player1Path, int player2Path);
 
-        void initializeBoard();
+        void initializeBoard(int player1Path, int player2Path);
         void displayTrack(int player_index);
         void displayBoard();
         bool movePlayer(int player_index);

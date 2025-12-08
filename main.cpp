@@ -92,7 +92,7 @@ int main(){
     }
     
 
-    Board mainBoard;
+    Board mainBoard(player1Journey, player2Journey);
     Player player1(player1Name, player1Advisor, player1Journey);
     Player player2(player2Name, player2Advisor, player2Journey);
     setDefualtAttributes(player1);
@@ -115,6 +115,7 @@ int main(){
                     break;
                 }
             }
+            // check the tile were on
         } else {
             cout << player1Name << " you have reached the end and have to wait for the other player" << endl;
         }
@@ -129,6 +130,7 @@ int main(){
                     break;
                 }
             }
+            // check the tile were on
         } else {
             cout << player2Name << " you have reached the end and have to wait for the other player" << endl;
         }
@@ -136,6 +138,7 @@ int main(){
     }
     mainBoard.displayBoard();
     cout << "You\'ve both reached the end. Congradulations, tallying up the points now."<< endl;
+
     //Post game stats to discovery point conversion
     int additionalDiscoveryPoints = ((player1.getAccuracy() / 100)*1000) + ((player1.getEfficiency() / 100)*1000) + ((player1.getInsight() / 100)*1000);
     player1.setDiscoveryPoints(player1.getDiscoveryPoints() + additionalDiscoveryPoints);
@@ -143,6 +146,7 @@ int main(){
     additionalDiscoveryPoints = ((player2.getAccuracy() / 100)*1000) + ((player2.getEfficiency() / 100)*1000) + ((player2.getInsight() / 100)*1000);
     player2.setDiscoveryPoints(player2.getDiscoveryPoints() + additionalDiscoveryPoints);
 
+    //Displaying the winner
     string winner;
     if (player1.getDiscoveryPoints() > player2.getDiscoveryPoints()){
         cout << "The winner is: " << player1Name << "!" << endl;

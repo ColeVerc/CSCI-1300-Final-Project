@@ -23,7 +23,7 @@ using namespace std;
 
 // =========================== Constructor ===========================
 
-Board::Board() {
+Board::Board(int player1Path, int player2Path) {
     // Creates two players
     _player_count = _MAX_PLAYERS;
 
@@ -33,19 +33,20 @@ Board::Board() {
     }
 
     // Fill both lanes
-    initializeBoard();
+    initializeBoard(player1Path, player2Path);
 }
 
 // =========================== Private Member Functions ===========================
 
-void Board::initializeTiles(int player_index) {
+void Board::initializeTiles(int player_index, int playerPath) {
     Tile tile;
     srand(time(0));
     int green_count = 0;
     // Recall 52 from header file
     int total_tiles = _BOARD_SIZE;
 
-    for (int i = 0; i < total_tiles; i++) {
+    if (playerPath == 1){ // This is the path creationg for the easier path
+        for (int i = 0; i < total_tiles; i++) {
         // Set the last tile as Orange for the finish line
         if (i == total_tiles - 1) {
             tile.color = 'O';
@@ -85,6 +86,49 @@ void Board::initializeTiles(int player_index) {
         // Assign the tile to the board for the specified lane/player 1 or 2
         // Recall i refers to tile 0 to 51
         _tiles[player_index][i] = tile;
+        }
+    } else if (playerPath == 2){ // This is the path creationg for the harder path
+        for (int i = 0; i < total_tiles; i++) {
+        // Set the last tile as Orange for the finish line
+        if (i == total_tiles - 1) {
+            tile.color = 'O';
+        } 
+        // Set the first tile as Grey for the starting line
+        else if (i == 0) {
+            tile.color = 'Y';
+        } 
+        // Hard-coded target of 15 green tiles
+        // Probablisitic method to spread out the green tiles randomly
+        else if (green_count < 15 && (rand() % (total_tiles - i) < 15 - green_count)) {
+            tile.color = 'G';
+            green_count++;
+        }
+        // Randomly assign one of the other colors: Blue, Pink, Brown, Red, Purple
+        else {
+            int color_choice = rand() % 5;
+            switch (color_choice) {
+                case 0:
+                    tile.color = 'B'; // Blue
+                    break;
+                case 1:
+                    tile.color = 'P'; // Pink
+                    break;
+                case 2:
+                    tile.color = 'T'; // Brown
+                    break;
+                case 3:
+                    tile.color = 'R'; // Red
+                    break;
+                case 4:
+                    tile.color = 'U'; // Purple
+                    break;
+            }
+        }
+
+        // Assign the tile to the board for the specified lane/player 1 or 2
+        // Recall i refers to tile 0 to 51
+        _tiles[player_index][i] = tile;
+        }
     }
 }
 
@@ -122,11 +166,10 @@ void Board::displayTile(int player_index, int pos) {
 
 // =========================== Public Member Functions ===========================
 
-void Board::initializeBoard() {
-    for (int i = 0; i < 2; i++) {
+void Board::initializeBoard(int player1Path, int player2Path) {
         // This ensures each lane (or each player) has a unique tile distribution
-        initializeTiles(i);
-    }
+        initializeTiles(0, player1Path);
+        initializeTiles(1, player2Path);
 }
 
 void Board::displayTrack(int player_index) {
