@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <ctime>
 using namespace std;
 
 //declaring functions
@@ -13,6 +14,7 @@ string convertCharecterType(int charecterNum);
 string convertAdvisorType(int advisorNum);
 void setDefualtAttributes(Player& player);
 void mainMenu(string playerName, int player1Pos, int playerNum, int player1DP, int accPoints, int effPoints, int insPoints, string playerAdvisor, int player2DP, int player2Pos);
+int playTurn();
 
 // Before the game starts
 int main(){
@@ -93,33 +95,63 @@ int main(){
     Player player2(player2Name, player2Advisor, player2Journey);
     setDefualtAttributes(player1);
     setDefualtAttributes(player2);
-    mainBoard.displayBoard();
 
     // Acutal Repeated Part of game
     // Win Condition
-    bool player1End = true;
-    bool player2End = true;
+    bool player1End = false;
+    bool player2End = false;
+
     //loop runs until both players are at the end
     while (!(player1End && player2End)){
-        if(mainBoard.getPlayerPosition(0) == 51){
-            player1End = true;
+        // Player 1's Turn
+        mainBoard.displayBoard();
+        mainMenu(player1Name, mainBoard.getPlayerPosition(0), 0, player1.getDiscoveryPoints(), player1.getAccuracy(), player1.getEfficiency(), player1.getInsight(), player1.getAdvisor(), player2.getDiscoveryPoints(), mainBoard.getPlayerPosition(1));
+        if (!player1End){
+            for (int i = 0; i < playTurn(); i++){
+                if (mainBoard.movePlayer(0)){
+                    player1End = true;
+                    break;
+                }
+            }
         } else {
-            mainBoard.displayBoard();
-            mainMenu(player1Name, mainBoard.getPlayerPosition(0), 0, player1.getDiscoveryPoints(), player1.getAccuracy(), player1.getEfficiency(), player1.getInsight(), player1.getAdvisor(), player2.getDiscoveryPoints(), mainBoard.getPlayerPosition(1));
-            //playTurn();
+            cout << player1Name << " you have reached the end and have to wait for the other player" << endl;
         }
-        if(mainBoard.getPlayerPosition(1) == 51){
-            player2End = true;
+    
+        // Player 2's Turn
+        mainBoard.displayBoard();
+        mainMenu(player2Name, mainBoard.getPlayerPosition(1), 1, player2.getDiscoveryPoints(), player2.getAccuracy(), player2.getEfficiency(), player2.getInsight(), player2.getAdvisor(), player1.getDiscoveryPoints(), mainBoard.getPlayerPosition(0));
+        if (!player2End){
+            for (int i = 0; i < playTurn(); i++){
+                if (mainBoard.movePlayer(1)){
+                    player2End = true;
+                    break;
+                }
+            }
+        } else {
+            cout << player2Name << " you have reached the end and have to wait for the other player" << endl;
         }
+    
     }
+    mainBoard.displayBoard();
+    cout << "You\'ve both reached the end. Congradulations, tallying up the points now."<< endl;
+    //Post game stats to discovery point conversion
+    int additionalDiscoveryPoints = ((player1.getAccuracy() / 100)*1000) + ((player1.getEfficiency() / 100)*1000) + ((player1.getInsight() / 100)*1000);
+    player1.setDiscoveryPoints(player1.getDiscoveryPoints() + additionalDiscoveryPoints);
 
+    additionalDiscoveryPoints = ((player2.getAccuracy() / 100)*1000) + ((player2.getEfficiency() / 100)*1000) + ((player2.getInsight() / 100)*1000);
+    player2.setDiscoveryPoints(player2.getDiscoveryPoints() + additionalDiscoveryPoints);
 
-
-
-
+    if (player1.getDiscoveryPoints() > player2.getDiscoveryPoints()){
+        cout << "The winner is: " << player1Name << "!" << endl;
+    } else if (player2.getDiscoveryPoints() > player1.getDiscoveryPoints()){
+        cout << "The winner is: " << player2Name << "!" << endl;
+    } else {
+        cout << "The game was a tie." << endl;
+    }
 }
 
 void mainMenu(string playerName, int player1Pos, int playerNum, int player1DP, int accPoints, int effPoints, int insPoints, string playerAdvisor, int player2DP, int player2Pos){
+    string temp;
     int userInput;
     cout << "Main Menu" << endl;
     cout << "Hello, " << playerName << ", What would you like to do (Enter the number)?" << endl;
@@ -135,16 +167,22 @@ void mainMenu(string playerName, int player1Pos, int playerNum, int player1DP, i
             cout << "Do you want to 1. review your discover points, or 2. Review your stats (type the number)."<< endl;
             cin >> userInput;
             if (userInput == 1){
-                cout << "Discovery Points: " << endl;
+                cout << "Discovery Points: " <<  player1DP << endl;
             } else if (userInput == 2){
                 cout << "Charecter Name: " << playerName << endl;
                 cout << "Accuracy: " << accPoints << endl;
                 cout << "Efficiency: " << effPoints << endl;
                 cout << "Insight: " << insPoints << endl;
             }
+            cout << "press 1 to go back" << endl;
+            cin >> userInput;
+            mainMenu(playerName, player1Pos, playerNum, player1DP, accPoints, effPoints, insPoints, playerAdvisor, player2DP, player2Pos);
             break;
         case 2:
             cout << "You have " << 52-player1Pos << " more tiles to go" << endl;
+            cout << "press 1 to go back" << endl;
+            cin >> userInput;
+            mainMenu(playerName, player1Pos, playerNum, player1DP, accPoints, effPoints, insPoints, playerAdvisor, player2DP, player2Pos);
             break;
         case 3:
             if (playerAdvisor == "Dr.Aliquot"){
@@ -160,6 +198,9 @@ void mainMenu(string playerName, int player1Pos, int playerNum, int player1DP, i
             } else {
                 cout << "you do not have an advisor" << endl;
             }
+            cout << "press 1 to go back" << endl;
+            cin >> userInput;
+            mainMenu(playerName, player1Pos, playerNum, player1DP, accPoints, effPoints, insPoints, playerAdvisor, player2DP, player2Pos);
             break;
         case 4:
         cout << "Do you want to 1. review their discover points, or 2. check their board position (type the number)."<< endl;
@@ -169,11 +210,21 @@ void mainMenu(string playerName, int player1Pos, int playerNum, int player1DP, i
             } else if (userInput == 2){
                 cout << "Your opponent has " << 52-player1Pos << " more tiles to go" << endl;
             }
+            cout << "press 1 to go back" << endl;
+            cin >> userInput;
+            mainMenu(playerName, player1Pos, playerNum, player1DP, accPoints, effPoints, insPoints, playerAdvisor, player2DP, player2Pos);
             break;
         case 5:
             break;
     }
 }
+
+//Essentially rolls a dice
+int playTurn(){
+    cout << "spinning wheel..." << endl;
+    return ((rand() % 6) + 1);
+}
+
 //converts the number associated with each charecter to the name
 string convertCharecterType(int charecterNum){
     string charecterName;
@@ -270,12 +321,12 @@ void setDefualtAttributes(Player& player){
         player.setAccuracy(player.getAccuracy() + 500);
         player.setEfficiency(player.getEfficiency() + 500);
         player.setInsight(player.getInsight() + 1000);
-        player.setDiscoveryPoints(player.getDiscoveryPoints() + 5000);
+        player.setDiscoveryPoints(player.getDiscoveryPoints() - 5000);
 
     } else if (player.getPath() == 2){
-        player.setAccuracy(player.getAccuracy() + 500);
-        player.setEfficiency(player.getEfficiency() + 500);
-        player.setInsight(player.getInsight() + 1000);
+        player.setAccuracy(player.getAccuracy() + 200);
+        player.setEfficiency(player.getEfficiency() + 200);
+        player.setInsight(player.getInsight() + 200);
         player.setDiscoveryPoints(player.getDiscoveryPoints() + 5000);
     }
 }
