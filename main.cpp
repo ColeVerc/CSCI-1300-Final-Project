@@ -18,6 +18,8 @@ int playTurn();
 
 // Before the game starts
 int main(){
+    srand(time(0));
+
     cout << "Welcome to Journey Though Genome.\nThrough this journey it is your goal to collect more dicovery points than your other scientist counterpart.\n" << endl;
 
     cout << "There are two types of journeys you can go on." << endl;

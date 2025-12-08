@@ -40,6 +40,7 @@ Board::Board() {
 
 void Board::initializeTiles(int player_index) {
     Tile tile;
+    srand(time(0));
     int green_count = 0;
     // Recall 52 from header file
     int total_tiles = _BOARD_SIZE;
