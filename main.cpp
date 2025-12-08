@@ -141,13 +141,24 @@ int main(){
     additionalDiscoveryPoints = ((player2.getAccuracy() / 100)*1000) + ((player2.getEfficiency() / 100)*1000) + ((player2.getInsight() / 100)*1000);
     player2.setDiscoveryPoints(player2.getDiscoveryPoints() + additionalDiscoveryPoints);
 
+    string winner;
     if (player1.getDiscoveryPoints() > player2.getDiscoveryPoints()){
         cout << "The winner is: " << player1Name << "!" << endl;
+        winner = player1Name;
     } else if (player2.getDiscoveryPoints() > player1.getDiscoveryPoints()){
         cout << "The winner is: " << player2Name << "!" << endl;
+        winner = player2Name;
     } else {
         cout << "The game was a tie." << endl;
+        winner = "Tie";
     }
+
+    // Appends to a file to keep track of final scores over time
+    ofstream postGameFile("GameScores.txt", ios::app);
+    if (postGameFile.is_open()) {
+        postGameFile << "The winner was " << winner << "| " << player1Name << " had " << player1.getDiscoveryPoints() << " Discovery Points| " << player2Name << " had " << player2.getDiscoveryPoints() << " Discovery Points" << endl;
+    }
+    postGameFile.close();
 }
 
 void mainMenu(string playerName, int player1Pos, int playerNum, int player1DP, int accPoints, int effPoints, int insPoints, string playerAdvisor, int player2DP, int player2Pos){
